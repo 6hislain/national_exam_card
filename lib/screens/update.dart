@@ -28,13 +28,13 @@ class _UpdateState extends State<Update> {
                   ])),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Simon", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Paul", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Elene", subtitle: '...')),
           SizedBox(
               height: 30,
               width: screenSize.width * 0.9,
@@ -47,13 +47,13 @@ class _UpdateState extends State<Update> {
                   ])),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Exam Day", subtitle: '...')),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Chrismas", subtitle: '...')),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Math Contest", subtitle: '...')),
           SizedBox(
               height: 30,
               width: screenSize.width * 0.9,
@@ -65,13 +65,13 @@ class _UpdateState extends State<Update> {
                   ])),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Peter", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "George", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "John", subtitle: '...')),
           SizedBox(
               height: 30,
               width: screenSize.width * 0.9,
@@ -84,13 +84,13 @@ class _UpdateState extends State<Update> {
                   ])),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "English 2022", subtitle: '...')),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Biology 2012", subtitle: '...')),
           Container(
               width: screenSize.width / 2.1,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Chemistry 2022", subtitle: '...')),
           SizedBox(
               height: 30,
               width: screenSize.width * 0.9,
@@ -103,13 +103,14 @@ class _UpdateState extends State<Update> {
                   ])),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Application approved", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child: MyCard(title: "Welcome to the app", subtitle: '...')),
           Container(
               width: screenSize.width / 0.9,
-              child: MyCard(title: "SG Remera", subtitle: '...')),
+              child:
+                  MyCard(title: "Thank you for registering", subtitle: '...')),
         ]));
   }
 }
