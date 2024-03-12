@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 class APIService {
   static const String _baseUrl = 'https://national-exam-card.onrender.com';
 
-  Future<Map<String, dynamic>> fetchData({String path = 'versions'}) async {
-    final response = await http.get(Uri.parse('$_baseUrl/api/v1/bible/$path'));
+  Future<Map<String, dynamic>> fetchData({String path = 'application'}) async {
+    final response = await http.get(Uri.parse('$_baseUrl/api/v1/$path'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
