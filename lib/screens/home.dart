@@ -1,8 +1,11 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../components/card_with_svg.dart';
 import '../components/my_card.dart';
+import '../utils/api_service.dart';
+import '../utils/db_helper.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,9 +17,34 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool _isLoading = true;
 
+  Future<void> fetchDataAndStoreInSQLite() async {
+    APIService apiService = APIService();
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        // Fetch data from the API using APIService
+        final Map<String, dynamic> subjects =
+            await apiService.fetchData(path: 'subject');
+        final Map<String, dynamic> schools =
+            await apiService.fetchData(path: 'school');
+        final Map<String, dynamic> combination =
+            await apiService.fetchData(path: 'combination');
+
+        // Insert data into SQLite using DatabaseHelper
+        // await databaseHelper.insert('your_table_name', data);
+
+        print('Data fetched and stored in SQLite successfully');
+      } catch (e) {
+        print('Error fetching or storing data: $e');
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchDataAndStoreInSQLite();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         _isLoading = false;
