@@ -8,7 +8,9 @@ import '../utils/api_service.dart';
 import '../utils/db_helper.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final void Function(int index) onItemTapped;
+
+  const Home({super.key, required this.onItemTapped});
 
   @override
   State<Home> createState() => _HomeState();
@@ -65,7 +67,7 @@ class _HomeState extends State<Home> {
       child: Container(
         padding: EdgeInsets.all(5),
         child: Wrap(runSpacing: 5, alignment: WrapAlignment.center, children: [
-          CardWithSvg(),
+          CardWithSvg(onItemTapped: widget.onItemTapped),
           SizedBox(
               height: 30,
               width: screenSize.width * 0.9,

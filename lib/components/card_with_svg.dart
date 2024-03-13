@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CardWithSvg extends StatelessWidget {
+  final void Function(int index) onItemTapped;
+
+  const CardWithSvg({
+    Key? key,
+    required this.onItemTapped,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -31,8 +38,16 @@ class CardWithSvg extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(child: Text('Apply today'), onPressed: () {}),
-                  TextButton(child: Text('Read more'), onPressed: () {}),
+                  TextButton(
+                      child: Text('Apply today'),
+                      onPressed: () {
+                        onItemTapped(3);
+                      }),
+                  TextButton(
+                      child: Text('Read more'),
+                      onPressed: () {
+                        onItemTapped(2);
+                      }),
                 ]),
           )
         ],

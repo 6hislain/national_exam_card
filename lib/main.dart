@@ -21,18 +21,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _isDarkModeEnabled = false;
   int _selectedIndex = 0;
-
-  static const List _widgetOptions = [
-    Home(),
-    Update(),
-    Help(),
-    Account(),
-  ];
+  late List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = [
+      Home(onItemTapped: _onItemTapped),
+      Update(),
+      Help(),
+      Account(),
+    ];
   }
 
   @override
