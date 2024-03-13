@@ -1,16 +1,18 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../components/card_with_svg.dart';
 import '../components/my_card.dart';
+import '../schemas/combination.dart';
+import '../schemas/school.dart';
 import '../utils/api_service.dart';
-import '../utils/db_helper.dart';
+import '../utils/isar_service.dart';
+import '../schemas/subject.dart';
 
 class Home extends StatefulWidget {
   final void Function(int index) onItemTapped;
 
-  const Home({super.key, required this.onItemTapped});
+  const Home({Key? key, required this.onItemTapped}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -18,44 +20,61 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isLoading = true;
+  IsarService db = IsarService();
+  List<Map<String, dynamic>> _subjects = [];
 
   Future<void> fetchDataAndStoreInSQLite() async {
     APIService apiService = APIService();
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.none) {
-      try {
-        // Fetch data from the API using APIService
-        final Map<String, dynamic> subjects =
-            await apiService.fetchData(path: 'subject');
-        final Map<String, dynamic> schools =
-            await apiService.fetchData(path: 'school');
-        final Map<String, dynamic> combination =
-            await apiService.fetchData(path: 'combination');
-
-        // Insert data into SQLite using DatabaseHelper
-        for (var data in subjects['subjects']['data']) {
-          await databaseHelper.insert('subjects', data);
-        }
-
-        // await databaseHelper.insert('subjects', (subjects['subjects']['data']));
-        // await databaseHelper.insert(
-        //     'combinations', (combination['combination']['data']));
-        // await databaseHelper.insert('schools', (schools['schools']['data']));
-      } catch (e) {
-        print('Error fetching or storing data: $e');
+    try {
+      final schools = await apiService.fetchData(path: 'school');
+      final subjects = await apiService.fetchData(path: 'subject');
+      final combinations = await apiService.fetchData(path: 'combination');
+      for (var data in subjects['subjects']['data']) {
+        var newSubject = Subject()
+          ..id = data['id']
+          ..name = data['name']
+          ..description = data['description']
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..userId = data['user_id'];
+        await db.saveSubject(newSubject);
       }
+      // for (var data in schools['schools']['data']) {
+      //   var newSchool = School()
+      //     ..id = data['id']
+      //     ..name = data['name']
+      //     ..description = data['description']
+      //     ..createdAt = DateTime.parse(data['created_at'])
+      //     ..userId = data['user_id'];
+      //   await db.saveSchool(newSchool);
+      // }
+      // for (var data in combinations['combinations']['data']) {
+      //   var newCombination = Combination()
+      //     ..id = data['id']
+      //     ..name = data['name']
+      //     ..description = data['description']
+      //     ..createdAt = DateTime.parse(data['created_at'])
+      //     ..userId = data['user_id'];
+      //   await db.saveCombination(newCombination);
+      // }
+    } catch (e) {
+      print('Error fetching or storing data: $e');
     }
+  }
+
+  Future<void> fetchSubjectsFromDatabase() async {
+    var subjects = await db.getSubjects();
+    print(subjects);
+    setState(() {
+      _subjects = subjects.cast<Map<String, dynamic>>();
+      _isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    fetchDataAndStoreInSQLite();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isLoading = false;
-      });
+    fetchDataAndStoreInSQLite().then((_) {
+      fetchSubjectsFromDatabase();
     });
   }
 
