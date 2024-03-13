@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppState {
   int activeTab;
-
   AppState({this.activeTab = 0});
 }
 
@@ -11,7 +10,6 @@ class UserState {
   String role;
   String name;
   String email;
-
   UserState({this.id = 0, this.role = '', this.name = '', this.email = ''});
 }
 
