@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -17,9 +17,9 @@ class DatabaseHelper {
     if (_database != null) return _database;
 
     // Initialize the database factory if it's not initialized already
-    // if (!databaseFactoryFfi.supported) {
-    //   databaseFactoryFfi.init();
-    // }
+    if (!databaseFactoryFfi.supported) {
+      databaseFactoryFfi.init();
+    }
 
     _database = await initDatabase();
     return _database;
