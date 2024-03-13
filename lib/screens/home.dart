@@ -32,9 +32,14 @@ class _HomeState extends State<Home> {
             await apiService.fetchData(path: 'combination');
 
         // Insert data into SQLite using DatabaseHelper
-        // await databaseHelper.insert('your_table_name', data);
+        for (var data in subjects['subjects']['data']) {
+          await databaseHelper.insert('subjects', data);
+        }
 
-        print('Data fetched and stored in SQLite successfully');
+        // await databaseHelper.insert('subjects', (subjects['subjects']['data']));
+        // await databaseHelper.insert(
+        //     'combinations', (combination['combination']['data']));
+        // await databaseHelper.insert('schools', (schools['schools']['data']));
       } catch (e) {
         print('Error fetching or storing data: $e');
       }

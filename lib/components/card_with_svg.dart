@@ -32,7 +32,7 @@ class CardWithSvg extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(child: Text('Apply today'), onPressed: () {}),
-                  TextButton(child: Text('Read More'), onPressed: () {}),
+                  TextButton(child: Text('Read more'), onPressed: () {}),
                 ]),
           )
         ],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -15,8 +16,28 @@ class DatabaseHelper {
   Future<Database?> get database async {
     if (_database != null) return _database;
 
+    // Initialize the database factory if it's not initialized already
+    // if (!databaseFactoryFfi.supported) {
+    //   databaseFactoryFfi.init();
+    // }
+
     _database = await initDatabase();
     return _database;
+  }
+
+  Future<int> insert(String table, Map<String, dynamic> data) async {
+    Database? db = await database;
+    return await db!.insert(table, data);
+  }
+
+  Future<List<Map<String, dynamic>>> get(String table) async {
+    Database? db = await database;
+    return await db!.query(table);
+  }
+
+  Future<int> delete(String table, int id) async {
+    Database? db = await database;
+    return await db!.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<Database> initDatabase() async {
@@ -166,20 +187,5 @@ class DatabaseHelper {
         ''');
       },
     );
-  }
-
-  Future<int> insert(String table, Map<String, dynamic> data) async {
-    Database? db = await database;
-    return await db!.insert(table, data);
-  }
-
-  Future<List<Map<String, dynamic>>> get(String table) async {
-    Database? db = await database;
-    return await db!.query(table);
-  }
-
-  Future<int> delete(String table, int id) async {
-    Database? db = await database;
-    return await db!.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 }
