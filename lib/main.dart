@@ -1,6 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:national_exam_card/utils/provider.dart';
 
 import '../screens/help.dart';
 import '../screens/home.dart';
@@ -24,14 +25,14 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   int _selectedIndex = 0;
   var connectivityResult;
   IsarService db = IsarService();
@@ -131,6 +132,12 @@ class _MyAppState extends State<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.saveSubject(newSubject);
+
+        final List<Subject> subjectsList = ref.read(subjectStateProvider);
+        ref.read(subjectStateProvider.notifier).state = [
+          ...subjectsList,
+          newSubject
+        ];
       }
       for (var data in schools['schools']['data']) {
         var newSchool = School()
@@ -141,6 +148,12 @@ class _MyAppState extends State<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.saveSchool(newSchool);
+
+        final List<School> schoolsList = ref.read(schoolStateProvider);
+        ref.read(schoolStateProvider.notifier).state = [
+          ...schoolsList,
+          newSchool
+        ];
       }
       for (var data in combinations['combinations']['data']) {
         var newCombination = Combination()
@@ -150,6 +163,13 @@ class _MyAppState extends State<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.saveCombination(newCombination);
+
+        final List<Combination> combinationsList =
+            ref.read(combinationStateProvider);
+        ref.read(combinationStateProvider.notifier).state = [
+          ...combinationsList,
+          newCombination
+        ];
       }
     } catch (e) {
       print('Error fetching or storing data: $e');
@@ -158,7 +178,12 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> checkConnectivity() async {
     connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult != ConnectivityResult.none) {
+    if (connectivityResult == ConnectivityResult.none) {
+      ref.read(schoolStateProvider.notifier).state = await db.getSchools();
+      ref.read(subjectStateProvider.notifier).state = await db.getSubjects();
+      ref.read(combinationStateProvider.notifier).state =
+          await db.getCombinations();
+    } else {
       fetchDataAndStore();
     }
   }

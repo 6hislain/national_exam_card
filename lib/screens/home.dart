@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../components/card_with_svg.dart';
@@ -7,47 +8,52 @@ import '../schemas/combination.dart';
 import '../schemas/school.dart';
 import '../schemas/subject.dart';
 import '../utils/isar_service.dart';
+import '../utils/provider.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   final void Function(int index) onItemTapped;
 
   const Home({super.key, required this.onItemTapped});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  bool _isLoading = false;
+class _HomeState extends ConsumerState<Home> {
   List<School> _schools = [];
   List<Subject> _subjects = [];
   IsarService db = IsarService();
   List<Combination> _combinations = [];
 
-  Future<void> fetchDataFromDatabase() async {
+  Future<void> loadData() async {
     var schools = await db.getSchools();
     var subjects = await db.getSubjects();
     var combinations = await db.getCombinations();
 
-    setState(() {
-      _schools = schools;
-      _subjects = subjects;
-      _combinations = combinations;
-      _isLoading = false;
-    });
+    _schools = schools.isEmpty
+        ? ref.read(schoolStateProvider.notifier).state
+        : schools;
+
+    _subjects = subjects.isEmpty
+        ? ref.read(subjectStateProvider.notifier).state
+        : subjects;
+
+    _combinations = combinations.isEmpty
+        ? ref.read(combinationStateProvider.notifier).state
+        : combinations;
   }
 
   @override
   void initState() {
     super.initState();
-    fetchDataFromDatabase();
+    loadData();
   }
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Skeletonizer(
-      enabled: _isLoading,
+      enabled: _schools.isEmpty || _subjects.isEmpty || _combinations.isEmpty,
       child: Container(
         padding: EdgeInsets.all(5),
         child: Wrap(
