@@ -30,7 +30,7 @@ void showLoginDialog(BuildContext context) {
                 ),
                 SizedBox(height: 10),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       TextButton(
                         onPressed: () {

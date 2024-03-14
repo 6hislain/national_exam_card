@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void showContactDialog(BuildContext context) {
   TextEditingController _nameController = TextEditingController();
@@ -83,13 +82,4 @@ void _sendMessage(String name, String email, String message) async {
   // Construct email link
   String emailLink =
       'mailto:$email?subject=Contact%20Message&body=Name:%20$name%0AEmail:%20$email%0AMessage:%20$message';
-
-  // Check if WhatsApp is installed
-  // if (await canLaunch(whatsAppLink)) {
-  //   // Launch WhatsApp if installed
-  //   await launch(whatsAppLink);
-  // } else {
-  //   // If WhatsApp is not installed, launch email
-  //   await launch(emailLink);
-  // }
 }
