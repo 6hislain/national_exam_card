@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../components/my_card.dart';
 
+import '../dialogs/login.dart';
+import '../dialogs/contact.dart';
+import '../dialogs/register.dart';
+import '../dialogs/customize.dart';
+import '../dialogs/application.dart';
+
 class Account extends StatefulWidget {
   const Account({super.key});
 
@@ -30,37 +36,19 @@ class _AccountState extends State<Account> {
                   ElevatedButton(
                     child: Text('Login'),
                     onPressed: () {
-                      _showLoginDialog(context);
+                      showLoginDialog(context);
                     },
                   ),
                   SizedBox(width: 10),
                   ElevatedButton(
                     child: Text('Register'),
                     onPressed: () {
-                      _showRegisterDialog(context);
+                      showRegisterDialog(context);
                     },
                   ),
                 ],
               ),
             ),
-            // Container(
-            //     width: screenSize.width,
-            //     child: Center(
-            //         child: Text(
-            //       'User',
-            //       style: Theme.of(context).textTheme.titleLarge,
-            //     ))),
-            // Container(
-            //     width: screenSize.width,
-            //     child: Center(
-            //         child: Text(
-            //       'Email',
-            //       style: Theme.of(context).textTheme.titleMedium,
-            //     ))),
-            // ElevatedButton(
-            //   child: Text('Edit Profile'),
-            //   onPressed: () {},
-            // )
           ]),
           Container(
               width: screenSize.width / 0.9,
@@ -71,7 +59,11 @@ class _AccountState extends State<Account> {
                   action: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(child: Text('Apply today'), onPressed: () {}),
+                      TextButton(
+                          child: Text('Apply today'),
+                          onPressed: () {
+                            showApplicationDialog(context);
+                          }),
                     ],
                   ))),
           Container(
@@ -82,7 +74,11 @@ class _AccountState extends State<Account> {
                   action: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(child: Text('Customize'), onPressed: () {}),
+                      TextButton(
+                          child: Text('Customize'),
+                          onPressed: () {
+                            showCustomizeDialog(context);
+                          }),
                     ],
                   ))),
           Container(
@@ -93,137 +89,15 @@ class _AccountState extends State<Account> {
                   action: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButton(child: Text('Contact'), onPressed: () {}),
+                      TextButton(
+                          child: Text('Contact'),
+                          onPressed: () {
+                            showContactDialog(context);
+                          }),
                     ],
                   ))),
         ],
       ),
-    );
-  }
-
-  void _showLoginDialog(BuildContext context) {
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Login'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(hintText: 'Email'),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(hintText: 'Password'),
-                obscureText: true,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Get email and password from controllers
-                String email = _emailController.text;
-                String password = _passwordController.text;
-
-                // Validate email and password
-                // You can implement your validation logic here
-
-                // For now, just print the email and password
-                print('Email: $email');
-                print('Password: $password');
-
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-              child: Text('Login'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showRegisterDialog(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
-    TextEditingController _confirmPasswordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Register'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(hintText: 'Name'),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(hintText: 'Email'),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(hintText: 'Password'),
-                obscureText: true,
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _confirmPasswordController,
-                decoration: InputDecoration(hintText: 'Confirm Password'),
-                obscureText: true,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Get name, email, password, and confirm password from controllers
-                String name = _nameController.text;
-                String email = _emailController.text;
-                String password = _passwordController.text;
-                String confirmPassword = _confirmPasswordController.text;
-
-                // Validate inputs (e.g., check if email is valid, password matches confirm password, etc.)
-                // For simplicity, I'm skipping validation in this example.
-
-                // For now, just print the name, email, and password
-                print('Name: $name');
-                print('Email: $email');
-                print('Password: $password');
-
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-              child: Text('Register'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -7,9 +7,14 @@ import '../screens/home.dart';
 import '../screens/update.dart';
 import '../screens/account.dart';
 
+import 'schemas/mark.dart';
+import 'schemas/paper.dart';
 import 'schemas/school.dart';
 import 'schemas/subject.dart';
 import 'schemas/combination.dart';
+import 'schemas/application.dart';
+import 'schemas/notification.dart';
+import 'schemas/calendar_event.dart';
 
 import 'utils/api_service.dart';
 import 'utils/isar_service.dart';
@@ -42,9 +47,82 @@ class _MyAppState extends State<MyApp> {
   Future<void> fetchDataAndStore() async {
     APIService apiService = APIService();
     try {
+      final marks = await apiService.fetchData(path: 'marks');
+      final papers = await apiService.fetchData(path: 'paper');
       final schools = await apiService.fetchData(path: 'school');
       final subjects = await apiService.fetchData(path: 'subject');
+      final calendarEvents = await apiService.fetchData(path: 'calendar');
+      final applications = await apiService.fetchData(path: 'application');
       final combinations = await apiService.fetchData(path: 'combination');
+      final notifications = await apiService.fetchData(path: 'notification');
+
+      for (var data in marks['marks']['data']) {
+        var newMark = Mark()
+          ..id = data['id']
+          ..year = data['year']
+          ..marks = data['marks']
+          ..semester = data['semester']
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..subjectId = data['subject_id']
+          ..studentId = data['student_id']
+          ..userId = data['user_id'];
+        await db.saveMark(newMark);
+      }
+      for (var data in papers['papers']['data']) {
+        var newPaper = Paper()
+          ..id = data['id']
+          ..name = data['name']
+          ..document = data['document']
+          ..description = data['description']
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..userId = data['user_id'];
+        await db.savePaper(newPaper);
+      }
+      for (var data in applications['applications']['data']) {
+        var newApplication = Application()
+          ..id = data['id']
+          ..firstName = data['first_name']
+          ..lastName = data['last_name']
+          ..gender = data['gender']
+          ..status = data['status']
+          ..city = data['city']
+          ..father = data['father']
+          ..mother = data['mother']
+          ..nationality = data['nationality']
+          ..contactPerson = data['contact_person']
+          ..contactDetails = data['contact_details']
+          ..description = data['description']
+          ..approved = data['approved']
+          ..dob = DateTime.parse(data['dob'])
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..combinationId = data['combination_id']
+          ..schoolId = data['school_id']
+          ..userId = data['user_id'];
+        await db.saveApplication(newApplication);
+      }
+      for (var data in notifications['notifications']['data']) {
+        var newNotification = Notifications()
+          ..id = data['id']
+          ..title = data['title']
+          ..url = data['url']
+          ..content = data['content']
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..userId = data['user_id'];
+        await db.saveNotification(newNotification);
+      }
+      for (var data in calendarEvents['events']['data']) {
+        var newCalendarEvent = CalendarEvent()
+          ..id = data['id']
+          ..name = data['name']
+          ..stop = data['stop']
+          ..start = data['start']
+          ..color = data['color']
+          ..description = data['description']
+          ..createdAt = DateTime.parse(data['created_at'])
+          ..userId = data['user_id'];
+        await db.saveCalendarEvent(newCalendarEvent);
+      }
+
       for (var data in subjects['subjects']['data']) {
         var newSubject = Subject()
           ..id = data['id']

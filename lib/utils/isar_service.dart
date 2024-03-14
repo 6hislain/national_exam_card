@@ -27,7 +27,7 @@ class IsarService {
         CombinationSchema,
         MarkSchema,
         MessageSchema,
-        NotificationSchema,
+        NotificationsSchema,
         PaperSchema,
         SchoolSchema,
         SubjectSchema,
@@ -118,5 +118,103 @@ class IsarService {
   Future<bool> deleteCombination(int id) async {
     final isar = await db;
     return isar.writeTxnSync<bool>(() => isar.combinations.deleteSync(id));
+  }
+
+  // START: paper
+  Future<int> savePaper(Paper newPaper) async {
+    final isar = await db;
+    return isar.writeTxnSync<int>(() => isar.papers.putSync(newPaper));
+  }
+
+  Future<List<Paper>> getPapers({int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.papers.where().offset(offset).limit(limit).findAll();
+  }
+
+  Future<bool> deletePaper(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.papers.deleteSync(id));
+  }
+
+  // START: application
+  Future<int> saveApplication(Application newApplication) async {
+    final isar = await db;
+    return isar
+        .writeTxnSync<int>(() => isar.applications.putSync(newApplication));
+  }
+
+  Future<List<Application>> getApplications(
+      {int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.applications
+        .where()
+        .offset(offset)
+        .limit(limit)
+        .findAll();
+  }
+
+  Future<bool> deleteApplication(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.applications.deleteSync(id));
+  }
+
+  // START: calendar event
+  Future<int> saveCalendarEvent(CalendarEvent newCalendarEvent) async {
+    final isar = await db;
+    return isar
+        .writeTxnSync<int>(() => isar.calendarEvents.putSync(newCalendarEvent));
+  }
+
+  Future<List<CalendarEvent>> getCalendarEvents(
+      {int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.calendarEvents
+        .where()
+        .offset(offset)
+        .limit(limit)
+        .findAll();
+  }
+
+  Future<bool> deleteCalendarEvent(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.calendarEvents.deleteSync(id));
+  }
+
+  // START: marks
+  Future<int> saveMark(Mark newMark) async {
+    final isar = await db;
+    return isar.writeTxnSync<int>(() => isar.marks.putSync(newMark));
+  }
+
+  Future<List<Mark>> getMarks({int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.marks.where().offset(offset).limit(limit).findAll();
+  }
+
+  Future<bool> deleteMark(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.marks.deleteSync(id));
+  }
+
+  // START: notification
+  Future<int> saveNotification(Notifications newNotification) async {
+    final isar = await db;
+    return isar
+        .writeTxnSync<int>(() => isar.notifications.putSync(newNotification));
+  }
+
+  Future<List<Notifications>> getNotifications(
+      {int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.notifications
+        .where()
+        .offset(offset)
+        .limit(limit)
+        .findAll();
+  }
+
+  Future<bool> deleteNotification(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.notifications.deleteSync(id));
   }
 }

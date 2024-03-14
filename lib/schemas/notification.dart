@@ -2,7 +2,7 @@ import 'package:isar/isar.dart';
 part 'notification.g.dart';
 
 @Collection()
-class Notification {
+class Notifications {
   Id? id;
 
   String? title;
