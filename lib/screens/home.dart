@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool _isLoading = true;
+  bool _isLoading = false;
   List<School> _schools = [];
   List<Subject> _subjects = [];
   IsarService db = IsarService();
