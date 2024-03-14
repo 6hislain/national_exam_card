@@ -25,28 +25,12 @@ class _HomeState extends ConsumerState<Home> {
   IsarService db = IsarService();
   List<Combination> _combinations = [];
 
-  Future<void> loadData() async {
-    var schools = await db.getSchools();
-    var subjects = await db.getSubjects();
-    var combinations = await db.getCombinations();
-
-    _schools = schools.isEmpty
-        ? ref.read(schoolStateProvider.notifier).state
-        : schools;
-
-    _subjects = subjects.isEmpty
-        ? ref.read(subjectStateProvider.notifier).state
-        : subjects;
-
-    _combinations = combinations.isEmpty
-        ? ref.read(combinationStateProvider.notifier).state
-        : combinations;
-  }
-
   @override
   void initState() {
     super.initState();
-    loadData();
+    _schools = ref.read(schoolStateProvider.notifier).state;
+    _subjects = ref.read(subjectStateProvider.notifier).state;
+    _combinations = ref.read(combinationStateProvider.notifier).state;
   }
 
   @override
