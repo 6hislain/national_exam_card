@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -20,12 +21,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isLoading = true;
+  var connectivityResult;
   IsarService db = IsarService();
   List<School> _schools = [];
   List<Subject> _subjects = [];
   List<Combination> _combinations = [];
 
-  Future<void> fetchDataAndStoreInSQLite() async {
+  Future<void> fetchDataAndStore() async {
     APIService apiService = APIService();
     try {
       final schools = await apiService.fetchData(path: 'school');
@@ -64,7 +66,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<void> fetchSubjectsFromDatabase() async {
+  Future<void> fetchDataFromDatabase() async {
     var schools = await db.getSchools();
     var subjects = await db.getSubjects();
     var combinations = await db.getCombinations();
@@ -72,18 +74,25 @@ class _HomeState extends State<Home> {
       _schools = schools;
       _subjects = subjects;
       _combinations = combinations;
+      _isLoading = false;
     });
+  }
+
+  Future<void> checkConnectivity() async {
+    connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      fetchDataFromDatabase();
+    } else {
+      fetchDataAndStore().then((_) {
+        fetchDataFromDatabase();
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchDataAndStoreInSQLite().then((_) {
-      fetchSubjectsFromDatabase();
-    });
-    setState(() {
-      _isLoading = false;
-    });
+    checkConnectivity();
   }
 
   @override
@@ -106,7 +115,7 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Subject ${_subjects.length}',
+                    'Subject',
                     style: Theme.of(context).textTheme.bodyLarge,
                   )
                 ],
