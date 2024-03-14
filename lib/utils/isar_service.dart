@@ -21,22 +21,21 @@ class IsarService {
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
-        [
-          ApplicationSchema,
-          CalendarEventSchema,
-          CombinationSchema,
-          MarkSchema,
-          MessageSchema,
-          NotificationSchema,
-          PaperSchema,
-          SchoolSchema,
-          SubjectSchema,
-          UserSchema
-        ],
-        directory: (await getApplicationDocumentsDirectory()).path,
-        inspector: true,
-      );
+      return await Isar.open([
+        ApplicationSchema,
+        CalendarEventSchema,
+        CombinationSchema,
+        MarkSchema,
+        MessageSchema,
+        NotificationSchema,
+        PaperSchema,
+        SchoolSchema,
+        SubjectSchema,
+        UserSchema
+      ],
+          directory: (await getApplicationDocumentsDirectory()).path,
+          inspector: true,
+          name: 'necams');
     }
     return Future.value(Isar.getInstance());
   }
@@ -81,5 +80,43 @@ class IsarService {
   Future<bool> deleteSubject(int id) async {
     final isar = await db;
     return isar.writeTxnSync<bool>(() => isar.subjects.deleteSync(id));
+  }
+
+  // START: school
+  Future<int> saveSchool(School newSchool) async {
+    final isar = await db;
+    return isar.writeTxnSync<int>(() => isar.schools.putSync(newSchool));
+  }
+
+  Future<List<School>> getSchools({int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.schools.where().offset(offset).limit(limit).findAll();
+  }
+
+  Future<bool> deleteSchool(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.schools.deleteSync(id));
+  }
+
+  // START: combination
+  Future<int> saveCombination(Combination newCombination) async {
+    final isar = await db;
+    return isar
+        .writeTxnSync<int>(() => isar.combinations.putSync(newCombination));
+  }
+
+  Future<List<Combination>> getCombinations(
+      {int offset = 0, int limit = 10}) async {
+    final isar = await db;
+    return await isar.combinations
+        .where()
+        .offset(offset)
+        .limit(limit)
+        .findAll();
+  }
+
+  Future<bool> deleteCombination(int id) async {
+    final isar = await db;
+    return isar.writeTxnSync<bool>(() => isar.combinations.deleteSync(id));
   }
 }
