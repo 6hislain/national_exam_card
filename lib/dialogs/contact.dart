@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void showContactDialog(BuildContext context) {
   TextEditingController _nameController = TextEditingController();
@@ -19,6 +20,47 @@ void showContactDialog(BuildContext context) {
                 Text('Contact',
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      color: Colors.red,
+                      icon: FaIcon(FontAwesomeIcons.envelope),
+                      onPressed: () {
+                        // Handle Email action
+                      },
+                    ),
+                    IconButton(
+                      color: Colors.blue[700],
+                      icon: Icon(Icons.facebook),
+                      onPressed: () {
+                        // Handle Facebook action
+                      },
+                    ),
+                    IconButton(
+                      color: Colors.green[700],
+                      icon: FaIcon(FontAwesomeIcons.whatsapp),
+                      onPressed: () {
+                        // Handle WhatsApp action
+                      },
+                    ),
+                    IconButton(
+                      color: Colors.blue,
+                      icon: FaIcon(FontAwesomeIcons.twitter),
+                      onPressed: () {
+                        // Handle Twitter action
+                      },
+                    ),
+                    IconButton(
+                      color: Colors.blue[800],
+                      icon: FaIcon(FontAwesomeIcons.linkedin),
+                      onPressed: () {
+                        // Handle LinkedIn action
+                      },
+                    ),
+                  ],
+                ),
                 TextField(
                   controller: _nameController,
                   decoration: InputDecoration(hintText: 'Name'),
@@ -58,9 +100,6 @@ void showContactDialog(BuildContext context) {
 
                         // Close the dialog
                         Navigator.of(context).pop();
-
-                        // Send the message via WhatsApp or email
-                        _sendMessage(name, email, message);
                       },
                       child: Text('Send'),
                     ),
@@ -73,13 +112,4 @@ void showContactDialog(BuildContext context) {
       );
     },
   );
-}
-
-void _sendMessage(String name, String email, String message) async {
-  // Construct WhatsApp link
-  String whatsAppLink =
-      'https://wa.me/?text=Name:%20$name%0AEmail:%20$email%0AMessage:%20$message';
-  // Construct email link
-  String emailLink =
-      'mailto:$email?subject=Contact%20Message&body=Name:%20$name%0AEmail:%20$email%0AMessage:%20$message';
 }

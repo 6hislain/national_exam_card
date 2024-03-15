@@ -5,7 +5,6 @@ import '../components/my_card.dart';
 import '../dialogs/login.dart';
 import '../dialogs/contact.dart';
 import '../dialogs/register.dart';
-import '../dialogs/customize.dart';
 import '../dialogs/application.dart';
 
 class Account extends StatefulWidget {
@@ -16,6 +15,9 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  bool _eventSwitchValue = false;
+  bool _notificationSwitchValue = false;
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -98,6 +100,79 @@ class _AccountState extends State<Account> {
                   ))),
         ],
       ),
+    );
+  }
+
+  void showCustomizeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Customize',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Checkbox(
+                        value: _eventSwitchValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _eventSwitchValue = value!;
+                          });
+                        },
+                      ),
+                      Text('Show calendar events'),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Checkbox(
+                        value: _notificationSwitchValue,
+                        onChanged: (value) {
+                          setState(() {
+                            _notificationSwitchValue = value!;
+                          });
+                        },
+                      ),
+                      Text('Get notifications'),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Close the dialog
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Apply'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
