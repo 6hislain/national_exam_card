@@ -64,7 +64,11 @@ class _AccountState extends State<Account> {
                       TextButton(
                           child: Text('Apply today'),
                           onPressed: () {
-                            showApplicationDialog(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ApplyDialog()),
+                            );
                           }),
                     ],
                   ))),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../dialogs/application.dart';
+
 class CardWithSvg extends StatelessWidget {
   final void Function(int index) onItemTapped;
 
@@ -41,7 +43,11 @@ class CardWithSvg extends StatelessWidget {
                   TextButton(
                       child: Text('Apply today'),
                       onPressed: () {
-                        onItemTapped(3);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ApplyDialog()),
+                        );
                       }),
                   TextButton(
                       child: Text('Read more'),

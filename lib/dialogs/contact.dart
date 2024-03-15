@@ -74,7 +74,7 @@ void showContactDialog(BuildContext context) {
                 TextField(
                   controller: _messageController,
                   decoration: InputDecoration(hintText: 'Message'),
-                  maxLines: null, // Allows multiline input
+                  maxLines: null,
                 ),
                 SizedBox(height: 10),
                 Row(
