@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ApplyDialog extends StatefulWidget {
@@ -24,6 +25,7 @@ class _ApplyState extends State<ApplyDialog> {
   File? _image;
 
   final picker = ImagePicker();
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -35,6 +37,26 @@ class _ApplyState extends State<ApplyDialog> {
         print('No image selected.');
       }
     });
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      authenticated = await _localAuthentication.authenticate(
+        localizedReason: 'Scan your fingerprint to authenticate',
+        // biometricOnly: true, // Deprecated parameter, can be removed
+      );
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    if (authenticated) {
+      // Fingerprint authentication successful, proceed with your logic.
+      print('Authentication successful');
+    } else {
+      // Fingerprint authentication failed.
+      print('Authentication failed');
+    }
   }
 
   @override
@@ -125,7 +147,7 @@ class _ApplyState extends State<ApplyDialog> {
                           _selectedGender = value;
                         });
                       },
-                      items: ['Male', 'Female']
+                      items: ['male', 'female']
                           .map((gender) => DropdownMenuItem<String>(
                                 value: gender,
                                 child: Text(gender),
@@ -155,16 +177,15 @@ class _ApplyState extends State<ApplyDialog> {
                 maxLines: null,
               ),
               SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Submit'),
-                  ),
-                ],
+              ElevatedButton(
+                onPressed: _authenticate, // Trigger fingerprint authentication
+                child: Text('Authenticate with Fingerprint'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Submit'),
               ),
             ],
           ),
