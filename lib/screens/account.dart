@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/my_card.dart';
 
@@ -7,16 +8,23 @@ import '../dialogs/contact.dart';
 import '../dialogs/register.dart';
 import '../dialogs/application.dart';
 
-class Account extends StatefulWidget {
+import '../schemas/user.dart';
+import '../utils/provider.dart';
+
+class Account extends ConsumerStatefulWidget {
   const Account({super.key});
 
   @override
-  State<Account> createState() => _AccountState();
+  ConsumerState<Account> createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends ConsumerState<Account> {
   bool _eventSwitchValue = false;
   bool _notificationSwitchValue = false;
+
+  void _setUser(User user) {
+    ref.read(userStateProvider.notifier).state = user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,7 @@ class _AccountState extends State<Account> {
                   ElevatedButton(
                     child: Text('Login'),
                     onPressed: () {
-                      showLoginDialog(context);
+                      showLoginDialog(context, _setUser);
                     },
                   ),
                   SizedBox(width: 10),

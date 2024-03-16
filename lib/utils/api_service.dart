@@ -14,19 +14,14 @@ class APIService {
     }
   }
 
-  Future<void> postData(Map<String, dynamic> data) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/post'),
+  Future<http.Response> postData(
+      {Map<String, dynamic> data = const {}, String path = ''}) async {
+    return await http.post(
+      Uri.parse('$_baseUrl/api/v1/$path'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(data),
     );
-
-    if (response.statusCode == 201) {
-      print('Data posted successfully');
-    } else {
-      throw Exception('Failed to post data');
-    }
   }
 }

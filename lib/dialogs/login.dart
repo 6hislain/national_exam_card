@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../schemas/user.dart';
+import '../utils/api_service.dart';
 
-void showLoginDialog(BuildContext context) {
+void showLoginDialog(BuildContext context, void Function(User) setUser) async {
+  APIService apiService = APIService();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  showDialog(
+  await showDialog(
     context: context,
     builder: (BuildContext context) {
       return Dialog(
@@ -39,19 +43,69 @@ void showLoginDialog(BuildContext context) {
                         child: Text('Cancel'),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          // Get email and password from controllers
-                          String email = _emailController.text;
-                          String password = _passwordController.text;
+                        onPressed: () async {
+                          String email = _emailController.text.trim();
+                          String password = _passwordController.text.trim();
 
-                          // Validate email and password
-                          // You can implement your validation logic here
+                          if (email.isEmpty || password.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Warning'),
+                                  content:
+                                      Text('Fill in all the required fields.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            return;
+                          }
 
-                          // For now, just print the email and password
-                          print('Email: $email');
-                          print('Password: $password');
+                          var response = await apiService.postData(
+                              path: 'signin',
+                              data: {'email': email, 'password': password});
 
-                          // Close the dialog
+                          try {
+                            Map<String, dynamic> data =
+                                jsonDecode(response.body);
+
+                            var user = User()
+                              ..id = data['user']['id']
+                              ..name = data['user']['name']
+                              ..email = data['user']['email']
+                              ..image = data['user']['image']
+                              ..role = data['user']['role'];
+
+                            setUser(user);
+                          } catch (e) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Warning'),
+                                  content: Text('Invalid credentials.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            return;
+                          }
+
                           Navigator.of(context).pop();
                         },
                         child: Text('Login'),

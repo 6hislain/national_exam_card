@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+Future<void> _launchURL(String url) async {
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 void showContactDialog(BuildContext context) {
   TextEditingController _nameController = TextEditingController();
@@ -27,36 +36,36 @@ void showContactDialog(BuildContext context) {
                     IconButton(
                       color: Colors.red,
                       icon: FaIcon(FontAwesomeIcons.envelope),
-                      onPressed: () {
-                        // Handle Email action
+                      onPressed: () async {
+                        await _launchURL('mailto:info@necams.com');
                       },
                     ),
                     IconButton(
                       color: Colors.blue[700],
                       icon: Icon(Icons.facebook),
-                      onPressed: () {
-                        // Handle Facebook action
+                      onPressed: () async {
+                        await _launchURL('https://fb.me/necams');
                       },
                     ),
                     IconButton(
                       color: Colors.green[700],
                       icon: FaIcon(FontAwesomeIcons.whatsapp),
-                      onPressed: () {
-                        // Handle WhatsApp action
+                      onPressed: () async {
+                        await _launchURL('https://wa.me/250785102285');
                       },
                     ),
                     IconButton(
                       color: Colors.blue,
                       icon: FaIcon(FontAwesomeIcons.twitter),
-                      onPressed: () {
-                        // Handle Twitter action
+                      onPressed: () async {
+                        await _launchURL('https://x.com/necams');
                       },
                     ),
                     IconButton(
                       color: Colors.blue[800],
                       icon: FaIcon(FontAwesomeIcons.linkedin),
-                      onPressed: () {
-                        // Handle LinkedIn action
+                      onPressed: () async {
+                        await _launchURL('https://linkedin.com/in/necams');
                       },
                     ),
                   ],

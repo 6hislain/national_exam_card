@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -45,18 +47,21 @@ class _HomeState extends ConsumerState<Home> {
           alignment: WrapAlignment.center,
           children: [
             CardWithSvg(onItemTapped: widget.onItemTapped),
-            SizedBox(
-              height: 30,
-              width: screenSize.width * 0.9,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Subject',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  )
-                ],
+            Visibility(
+              visible: _subjects.isNotEmpty,
+              child: SizedBox(
+                height: 30,
+                width: screenSize.width * 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Subject',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  ],
+                ),
               ),
             ),
             // Generate subject cards dynamically
@@ -65,18 +70,21 @@ class _HomeState extends ConsumerState<Home> {
                 width: screenSize.width / 2.1,
                 child: MyCard(title: subject.name ?? '', subtitle: ''),
               ),
-            SizedBox(
-              height: 30,
-              width: screenSize.width * 0.9,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'School',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  )
-                ],
+            Visibility(
+              visible: _schools.isNotEmpty,
+              child: SizedBox(
+                height: 30,
+                width: screenSize.width * 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'School',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  ],
+                ),
               ),
             ),
             // Generate school cards dynamically
@@ -85,18 +93,21 @@ class _HomeState extends ConsumerState<Home> {
                 width: screenSize.width / 2.1,
                 child: MyCard(title: school.name ?? '', subtitle: ''),
               ),
-            SizedBox(
-              height: 30,
-              width: screenSize.width * 0.9,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Combination',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  )
-                ],
+            Visibility(
+              visible: _combinations.isNotEmpty,
+              child: SizedBox(
+                height: 30,
+                width: screenSize.width * 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Combination',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  ],
+                ),
               ),
             ),
             // Generate combination cards dynamically
