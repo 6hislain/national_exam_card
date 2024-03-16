@@ -19,11 +19,23 @@ class Account extends ConsumerStatefulWidget {
 }
 
 class _AccountState extends ConsumerState<Account> {
+  User _user = User();
   bool _eventSwitchValue = false;
   bool _notificationSwitchValue = false;
 
   void _setUser(User user) {
     ref.read(userStateProvider.notifier).state = user;
+    setState(() {
+      _user = user;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _user = ref.read(userStateProvider.notifier).state;
+    });
   }
 
   @override
@@ -42,21 +54,40 @@ class _AccountState extends ConsumerState<Account> {
               width: screenSize.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    child: Text('Login'),
-                    onPressed: () {
-                      showLoginDialog(context, _setUser);
-                    },
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    child: Text('Register'),
-                    onPressed: () {
-                      showRegisterDialog(context);
-                    },
-                  ),
-                ],
+                children: _user.id != null
+                    ? [
+                        Column(children: [
+                          Text('${_user.name}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 8),
+                          Text('${_user.email}',
+                              style: TextStyle(fontSize: 14)),
+                          SizedBox(height: 8),
+                          ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _user = User();
+                                });
+                              },
+                              child: Text('Logout')),
+                        ])
+                      ]
+                    : [
+                        ElevatedButton(
+                          child: Text('Login'),
+                          onPressed: () {
+                            showLoginDialog(context, _setUser);
+                          },
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          child: Text('Register'),
+                          onPressed: () {
+                            showRegisterDialog(context);
+                          },
+                        ),
+                      ],
               ),
             ),
           ]),
@@ -66,35 +97,39 @@ class _AccountState extends ConsumerState<Account> {
                   title: "Apply for the exam card",
                   subtitle:
                       'Submit your exam card application to eligible for the national exam',
-                  action: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          child: Text('Apply today'),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ApplyDialog()),
-                            );
-                          }),
-                    ],
-                  ))),
+                  action: _user.id != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                child: Text('Apply today'),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ApplyDialog()),
+                                  );
+                                }),
+                          ],
+                        )
+                      : Container())),
           Container(
               width: screenSize.width / 2.1,
               child: PlainCard(
                   title: "Notifications",
                   subtitle: 'Customize my emails, app notifications',
-                  action: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          child: Text('Customize'),
-                          onPressed: () {
-                            showCustomizeDialog(context);
-                          }),
-                    ],
-                  ))),
+                  action: _user.id != null
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                child: Text('Customize'),
+                                onPressed: () {
+                                  showCustomizeDialog(context);
+                                }),
+                          ],
+                        )
+                      : Container())),
           Container(
               width: screenSize.width / 2.1,
               child: PlainCard(
