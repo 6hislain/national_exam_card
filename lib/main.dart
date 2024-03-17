@@ -200,8 +200,14 @@ class _MyAppState extends ConsumerState<MyApp> {
   Future<void> checkConnectivity() async {
     connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
+      ref.read(markStateProvider.notifier).state = await db.getMarks();
+      ref.read(paperStateProvider.notifier).state = await db.getPapers();
       ref.read(schoolStateProvider.notifier).state = await db.getSchools();
       ref.read(subjectStateProvider.notifier).state = await db.getSubjects();
+      ref.read(eventStateProvider.notifier).state =
+          await db.getCalendarEvents();
+      ref.read(applicationStateProvider.notifier).state =
+          await db.getApplications();
       ref.read(combinationStateProvider.notifier).state =
           await db.getCombinations();
     } else {
