@@ -2,6 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:national_exam_card/utils/provider.dart';
+
+import '../schemas/school.dart';
+import '../schemas/combination.dart';
+import '../utils/api_service.dart';
 
 class ApplyDialog extends ConsumerStatefulWidget {
   const ApplyDialog({Key? key}) : super(key: key);
@@ -11,6 +16,14 @@ class ApplyDialog extends ConsumerStatefulWidget {
 }
 
 class _ApplyState extends ConsumerState<ApplyDialog> {
+  File? _image;
+  String? _selectedGender;
+  String? _selectedSchool;
+  String? _selectedCombination;
+  List<School> _schools = [];
+  List<Combination> _combinations = [];
+  APIService apiService = APIService();
+
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
@@ -20,9 +33,6 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
   TextEditingController _contactPersonController = TextEditingController();
   TextEditingController _contactDetailsController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-
-  File? _image;
-  String? _selectedGender;
 
   final picker = ImagePicker();
 
@@ -36,6 +46,21 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
         print('No image selected.');
       }
     });
+  }
+
+  void _handleSubmit() async {
+    String firstName = _firstNameController.text.trim();
+
+    var response = await apiService.postData(path: '/apply', data: {});
+
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _schools = ref.read(schoolStateProvider.notifier).state;
+    _combinations = ref.read(combinationStateProvider.notifier).state;
   }
 
   @override
@@ -150,6 +175,47 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
                         ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: screenWidth / 2.4,
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedSchool,
+                      hint: Text('School'),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedSchool = value;
+                        });
+                      },
+                      items: _schools
+                          .map((item) => DropdownMenuItem<String>(
+                                value: '${item.id}',
+                                child: Text(item.name ?? ""),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                  SizedBox(
+                    width: screenWidth / 2.4,
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedCombination,
+                      hint: Text('Combination'),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCombination = value;
+                        });
+                      },
+                      items: _combinations
+                          .map((item) => DropdownMenuItem<String>(
+                                value: '${item.id}',
+                                child: Text(item.name ?? ""),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
               TextField(
                 controller: _descriptionController,
                 decoration: InputDecoration(hintText: 'Description'),
@@ -157,9 +223,7 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: _handleSubmit,
                 child: Text('Submit'),
               ),
             ],
