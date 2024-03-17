@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../components/card_with_svg.dart';
-import '../components/my_card.dart';
 import '../schemas/combination.dart';
 import '../schemas/school.dart';
 import '../schemas/subject.dart';
