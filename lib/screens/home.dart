@@ -30,9 +30,9 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    _schools = ref.read(schoolStateProvider.notifier).state;
-    _subjects = ref.read(subjectStateProvider.notifier).state;
-    _combinations = ref.read(combinationStateProvider.notifier).state;
+    _schools = ref.read(schoolStateProvider);
+    _subjects = ref.read(subjectStateProvider);
+    _combinations = ref.read(combinationStateProvider);
   }
 
   @override

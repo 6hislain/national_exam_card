@@ -33,7 +33,7 @@ class _AccountState extends ConsumerState<Account> {
   @override
   void initState() {
     super.initState();
-    _user = ref.read(userStateProvider.notifier).state;
+    _user = ref.read(userStateProvider);
   }
 
   @override

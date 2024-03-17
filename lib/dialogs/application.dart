@@ -59,8 +59,8 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
   @override
   void initState() {
     super.initState();
-    _schools = ref.read(schoolStateProvider.notifier).state;
-    _combinations = ref.read(combinationStateProvider.notifier).state;
+    _schools = ref.read(schoolStateProvider);
+    _combinations = ref.read(combinationStateProvider);
   }
 
   @override

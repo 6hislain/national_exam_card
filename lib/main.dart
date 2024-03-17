@@ -68,6 +68,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..studentId = data['student_id']
           ..userId = data['user_id'];
         await db.saveMark(newMark);
+
+        final List<Mark> marksList = ref.read(markStateProvider);
       }
       for (var data in papers['papers']['data']) {
         var newPaper = Paper()
