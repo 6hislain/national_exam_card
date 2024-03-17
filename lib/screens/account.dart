@@ -33,9 +33,7 @@ class _AccountState extends ConsumerState<Account> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _user = ref.read(userStateProvider.notifier).state;
-    });
+    _user = ref.read(userStateProvider.notifier).state;
   }
 
   @override
@@ -47,7 +45,9 @@ class _AccountState extends ConsumerState<Account> {
         children: [
           Wrap(alignment: WrapAlignment.center, runSpacing: 10, children: [
             CircleAvatar(
-              backgroundImage: AssetImage('assets/img/user.png'),
+              backgroundImage: AssetImage(_user.id != null
+                  ? 'assets/img/user2.png'
+                  : 'assets/img/user.png'),
               radius: 50,
             ),
             Container(
@@ -84,7 +84,7 @@ class _AccountState extends ConsumerState<Account> {
                         ElevatedButton(
                           child: Text('Register'),
                           onPressed: () {
-                            showRegisterDialog(context);
+                            showRegisterDialog(context, _setUser);
                           },
                         ),
                       ],

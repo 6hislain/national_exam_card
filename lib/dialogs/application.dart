@@ -1,16 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ApplyDialog extends StatefulWidget {
+class ApplyDialog extends ConsumerStatefulWidget {
   const ApplyDialog({Key? key}) : super(key: key);
 
   @override
-  _ApplyState createState() => _ApplyState();
+  ConsumerState createState() => _ApplyState();
 }
 
-class _ApplyState extends State<ApplyDialog> {
+class _ApplyState extends ConsumerState<ApplyDialog> {
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
@@ -21,11 +21,10 @@ class _ApplyState extends State<ApplyDialog> {
   TextEditingController _contactDetailsController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
 
-  String? _selectedGender;
   File? _image;
+  String? _selectedGender;
 
   final picker = ImagePicker();
-  final LocalAuthentication _localAuthentication = LocalAuthentication();
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -37,26 +36,6 @@ class _ApplyState extends State<ApplyDialog> {
         print('No image selected.');
       }
     });
-  }
-
-  Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      authenticated = await _localAuthentication.authenticate(
-        localizedReason: 'Scan your fingerprint to authenticate',
-        // biometricOnly: true, // Deprecated parameter, can be removed
-      );
-    } catch (e) {
-      print('Error: $e');
-    }
-
-    if (authenticated) {
-      // Fingerprint authentication successful, proceed with your logic.
-      print('Authentication successful');
-    } else {
-      // Fingerprint authentication failed.
-      print('Authentication failed');
-    }
   }
 
   @override
@@ -177,10 +156,6 @@ class _ApplyState extends State<ApplyDialog> {
                 maxLines: null,
               ),
               SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _authenticate, // Trigger fingerprint authentication
-                child: Text('Authenticate with Fingerprint'),
-              ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();

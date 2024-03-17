@@ -85,6 +85,14 @@ void showLoginDialog(BuildContext context, void Function(User) setUser) async {
                               ..role = data['user']['role'];
 
                             setUser(user);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Welcome back ${user.name}!'),
+                                duration: Duration(
+                                    seconds: 3), // Adjust duration as needed
+                              ),
+                            );
                           } catch (e) {
                             showDialog(
                               context: context,

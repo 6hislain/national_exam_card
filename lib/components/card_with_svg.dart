@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../dialogs/application.dart';
+import '../schemas/user.dart';
+import '../utils/provider.dart';
 
-class CardWithSvg extends StatelessWidget {
+class CardWithSvg extends ConsumerStatefulWidget {
   final void Function(int index) onItemTapped;
 
   const CardWithSvg({
     Key? key,
     required this.onItemTapped,
   }) : super(key: key);
+
+  @override
+  ConsumerState createState() => _CardWithSvgState();
+}
+
+class _CardWithSvgState extends ConsumerState<CardWithSvg> {
+  User _user = User();
+
+  @override
+  void initState() {
+    super.initState();
+    _user = ref.read(userStateProvider.notifier).state;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +56,21 @@ class CardWithSvg extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                      child: Text('Apply today'),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ApplyDialog()),
-                        );
-                      }),
+                  _user.id == null
+                      ? Container()
+                      : TextButton(
+                          child: Text('Apply today'),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ApplyDialog()),
+                            );
+                          }),
                   TextButton(
                       child: Text('Read more'),
                       onPressed: () {
-                        onItemTapped(2);
+                        widget.onItemTapped(2);
                       }),
                 ]),
           )

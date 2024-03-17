@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../schemas/user.dart';
+import '../utils/api_service.dart';
 
-void showRegisterDialog(BuildContext context) {
+void showRegisterDialog(
+    BuildContext context, void Function(User) setUser) async {
+  APIService apiService = APIService();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -52,23 +57,108 @@ void showRegisterDialog(BuildContext context) {
                       child: Text('Cancel'),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // Get name, email, password, and confirm password from controllers
-                        String name = _nameController.text;
-                        String email = _emailController.text;
-                        String password = _passwordController.text;
+                      onPressed: () async {
+                        String name = _nameController.text.trim();
+                        String email = _emailController.text.trim();
+                        String password = _passwordController.text.trim();
                         String confirmPassword =
-                            _confirmPasswordController.text;
+                            _confirmPasswordController.text.trim();
 
-                        // Validate inputs (e.g., check if email is valid, password matches confirm password, etc.)
-                        // For simplicity, I'm skipping validation in this example.
+                        if (name.isEmpty ||
+                            email.isEmpty ||
+                            password.isEmpty ||
+                            confirmPassword.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Warning'),
+                                content:
+                                    Text('Fill in all the required fields.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
 
-                        // For now, just print the name, email, and password
-                        print('Name: $name');
-                        print('Email: $email');
-                        print('Password: $password');
+                        if (password != confirmPassword) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Warning'),
+                                content: Text("Passwords don't match."),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
 
-                        // Close the dialog
+                        var response = await apiService.postData(
+                            path: 'signup',
+                            data: {
+                              'name': name,
+                              'email': email,
+                              'password': password
+                            });
+
+                        try {
+                          Map<String, dynamic> data = jsonDecode(response.body);
+
+                          var user = User()
+                            ..id = data['user']['id']
+                            ..name = data['user']['name']
+                            ..email = data['user']['email']
+                            ..image = data['user']['image']
+                            ..role = data['user']['role'];
+
+                          setUser(user);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Thank you for joining ${user.name}!'),
+                              duration: Duration(
+                                  seconds: 3), // Adjust duration as needed
+                            ),
+                          );
+                        } catch (e) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Warning'),
+                                content: Text('Sign up failed, try again.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
+
                         Navigator.of(context).pop();
                       },
                       child: Text('Register'),
