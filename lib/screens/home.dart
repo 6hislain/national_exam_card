@@ -57,7 +57,7 @@ class _HomeState extends ConsumerState<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Subject',
+                      'Subjects (${_subjects.length})',
                       style: Theme.of(context).textTheme.bodyLarge,
                     )
                   ],
@@ -65,34 +65,25 @@ class _HomeState extends ConsumerState<Home> {
               ),
             ),
             // Generate subject cards dynamically
-            for (var subject in _subjects)
-              Container(
-                width: screenSize.width / 2.1,
-                child: MyCard(title: subject.name ?? '', subtitle: ''),
-              ),
-            Visibility(
-              visible: _schools.isNotEmpty,
-              child: SizedBox(
-                height: 30,
+            SizedBox(
                 width: screenSize.width * 0.9,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'School',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            // Generate school cards dynamically
-            for (var school in _schools)
-              Container(
-                width: screenSize.width / 2.1,
-                child: MyCard(title: school.name ?? '', subtitle: ''),
-              ),
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          for (var subject in _subjects)
+                            Container(
+                              width: screenSize.width / 2.1,
+                              child: Card(
+                                  child: Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text(subject.name ?? '',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold)))),
+                            ),
+                        ]))),
             Visibility(
               visible: _combinations.isNotEmpty,
               child: SizedBox(
@@ -103,7 +94,7 @@ class _HomeState extends ConsumerState<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Combination',
+                      'Combinations (${_combinations.length})',
                       style: Theme.of(context).textTheme.bodyLarge,
                     )
                   ],
@@ -111,11 +102,115 @@ class _HomeState extends ConsumerState<Home> {
               ),
             ),
             // Generate combination cards dynamically
-            for (var combination in _combinations)
-              Container(
-                width: screenSize.width / 2.1,
-                child: MyCard(title: combination.name ?? '', subtitle: ''),
+            SizedBox(
+              width: screenSize.width * 0.9,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var combination in _combinations)
+                      Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(combination.name ?? ''),
+                                  content: Text(combination.description ?? ''),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            combination.name ?? '',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
+            ),
+            Visibility(
+              visible: _schools.isNotEmpty,
+              child: SizedBox(
+                height: 30,
+                width: screenSize.width * 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Schools (${_schools.length})',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            // Generate school cards dynamically
+            SizedBox(
+                width: screenSize.width * 0.9,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          for (var school in _schools)
+                            Container(
+                              width: screenSize.width / 2.1,
+                              child: Card(
+                                  child: Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Column(
+                                        children: [
+                                          Text(school.name ?? '',
+                                              style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold)),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title:
+                                                        Text(school.name ?? ''),
+                                                    content: Text(
+                                                        school.description ??
+                                                            ''),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text('OK'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text('Open'),
+                                          ),
+                                        ],
+                                      ))),
+                            ),
+                        ]))),
           ],
         ),
       ),

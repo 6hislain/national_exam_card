@@ -211,6 +211,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       ref.read(combinationStateProvider.notifier).state =
           await db.getCombinations();
     } else {
+      await db.cleanDB();
       fetchDataAndStore();
     }
   }
