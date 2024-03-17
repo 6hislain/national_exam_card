@@ -14,20 +14,10 @@ class MyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(title,
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
             SizedBox(height: 8.0),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
+            Text(subtitle, style: TextStyle(fontSize: 16.0)),
           ],
         ),
       ),
@@ -52,20 +42,10 @@ class PlainCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(title,
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
           SizedBox(height: 8.0),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 16.0,
-            ),
-          ),
+          Text(subtitle, style: TextStyle(fontSize: 16.0)),
           action,
         ],
       ),
