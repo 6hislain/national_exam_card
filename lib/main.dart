@@ -1,7 +1,6 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:national_exam_card/utils/provider.dart';
 
 import '../screens/help.dart';
 import '../screens/home.dart';
@@ -19,6 +18,7 @@ import 'schemas/calendar_event.dart';
 
 import 'utils/api_service.dart';
 import 'utils/isar_service.dart';
+import 'utils/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
