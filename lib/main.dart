@@ -69,7 +69,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..userId = data['user_id'];
         await db.saveMark(newMark);
 
-        final List<Mark> marksList = ref.read(markStateProvider);
+        final List<Mark> thisList = ref.read(markStateProvider);
+        ref.read(markStateProvider.notifier).state = [...thisList, newMark];
       }
       for (var data in papers['papers']['data']) {
         var newPaper = Paper()
@@ -80,6 +81,9 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.savePaper(newPaper);
+
+        final List<Paper> thisList = ref.read(paperStateProvider);
+        ref.read(paperStateProvider.notifier).state = [...thisList, newPaper];
       }
       for (var data in applications['applications']['data']) {
         var newApplication = Application()
@@ -102,6 +106,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..schoolId = data['school_id']
           ..userId = data['user_id'];
         await db.saveApplication(newApplication);
+
+        final List<Application> thisList = ref.read(applicationStateProvider);
+        ref.read(applicationStateProvider.notifier).state = [
+          ...thisList,
+          newApplication
+        ];
       }
       for (var data in notifications['notifications']['data']) {
         var newNotification = Notifications()
@@ -112,6 +122,13 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.saveNotification(newNotification);
+
+        final List<Notifications> thisList =
+            ref.read(notificationStateProvider);
+        ref.read(notificationStateProvider.notifier).state = [
+          ...thisList,
+          newNotification
+        ];
       }
       for (var data in calendarEvents['events']['data']) {
         var newCalendarEvent = CalendarEvent()
@@ -124,6 +141,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..createdAt = DateTime.parse(data['created_at'])
           ..userId = data['user_id'];
         await db.saveCalendarEvent(newCalendarEvent);
+
+        final List<CalendarEvent> thisList = ref.read(eventStateProvider);
+        ref.read(eventStateProvider.notifier).state = [
+          ...thisList,
+          newCalendarEvent
+        ];
       }
 
       for (var data in subjects['subjects']['data']) {
@@ -135,9 +158,9 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..userId = data['user_id'];
         await db.saveSubject(newSubject);
 
-        final List<Subject> subjectsList = ref.read(subjectStateProvider);
+        final List<Subject> thisList = ref.read(subjectStateProvider);
         ref.read(subjectStateProvider.notifier).state = [
-          ...subjectsList,
+          ...thisList,
           newSubject
         ];
       }
@@ -151,11 +174,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..userId = data['user_id'];
         await db.saveSchool(newSchool);
 
-        final List<School> schoolsList = ref.read(schoolStateProvider);
-        ref.read(schoolStateProvider.notifier).state = [
-          ...schoolsList,
-          newSchool
-        ];
+        final List<School> thisList = ref.read(schoolStateProvider);
+        ref.read(schoolStateProvider.notifier).state = [...thisList, newSchool];
       }
       for (var data in combinations['combinations']['data']) {
         var newCombination = Combination()
@@ -166,10 +186,9 @@ class _MyAppState extends ConsumerState<MyApp> {
           ..userId = data['user_id'];
         await db.saveCombination(newCombination);
 
-        final List<Combination> combinationsList =
-            ref.read(combinationStateProvider);
+        final List<Combination> thisList = ref.read(combinationStateProvider);
         ref.read(combinationStateProvider.notifier).state = [
-          ...combinationsList,
+          ...thisList,
           newCombination
         ];
       }
