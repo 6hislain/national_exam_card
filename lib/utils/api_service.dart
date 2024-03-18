@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class APIService {
-  static const String _baseUrl = 'https://national-exam-card.onrender.com';
+  static const String _baseUrl = 'https://necams.onrender.com';
 
   Future<Map<String, dynamic>> fetchData({String path = 'application'}) async {
     final response = await http.get(Uri.parse('$_baseUrl/api/v1/$path'));
