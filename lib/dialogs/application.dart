@@ -6,6 +6,7 @@ import 'package:national_exam_card/utils/provider.dart';
 
 import '../schemas/school.dart';
 import '../schemas/combination.dart';
+import '../schemas/user.dart';
 import '../utils/api_service.dart';
 
 class ApplyDialog extends ConsumerStatefulWidget {
@@ -20,6 +21,7 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
   String? _selectedGender;
   String? _selectedSchool;
   String? _selectedCombination;
+  User _user = User();
   List<School> _schools = [];
   List<Combination> _combinations = [];
   APIService apiService = APIService();
@@ -50,8 +52,65 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
 
   void _handleSubmit() async {
     String firstName = _firstNameController.text.trim();
+    String lastName = _lastNameController.text.trim();
+    String city = _cityController.text.trim();
+    String father = _fatherController.text.trim();
+    String mother = _motherController.text.trim();
+    String nationality = _nationalityController.text.trim();
+    String contactPerson = _contactPersonController.text.trim();
+    String contactDetails = _contactDetailsController.text.trim();
+    String description = _descriptionController.text.trim();
 
-    var response = await apiService.postData(path: '/apply', data: {});
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        city.isEmpty ||
+        mother.isEmpty ||
+        nationality.isEmpty ||
+        contactDetails.isEmpty ||
+        contactPerson.isEmpty ||
+        description.isEmpty ||
+        father.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Warning'),
+            content: Text('Fill in all the required fields.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    var response = await apiService.postData(path: 'application', data: {
+      'first_name': firstName,
+      'last_name': lastName,
+      'city': city,
+      'mother': mother,
+      'father': father,
+      'nationality': nationality,
+      'contact_person': contactPerson,
+      'contact_details': contactDetails,
+      'description': description,
+      'gender': _selectedGender,
+      'combination_id': _selectedCombination,
+      'school_id': _selectedSchool,
+      'status': 'pending',
+      'dob': '2024-03-13 10:25:19',
+      'id': _user.id,
+    });
+
+    print(response.statusCode);
+    print(response.headers);
+    print(response.body);
 
     Navigator.of(context).pop();
   }
@@ -59,6 +118,7 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
   @override
   void initState() {
     super.initState();
+    _user = ref.read(userStateProvider);
     _schools = ref.read(schoolStateProvider);
     _combinations = ref.read(combinationStateProvider);
   }

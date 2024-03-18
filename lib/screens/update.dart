@@ -57,15 +57,58 @@ class _UpdateState extends ConsumerState<Update> {
                           style: Theme.of(context).textTheme.bodyLarge)
                     ])),
           ),
-          Container(
-              width: screenSize.width / 0.9,
-              child: MyCard(title: "Simon", subtitle: '...')),
-          Container(
-              width: screenSize.width / 0.9,
-              child: MyCard(title: "Paul", subtitle: '...')),
-          Container(
-              width: screenSize.width / 0.9,
-              child: MyCard(title: "Elene", subtitle: '...')),
+          for (var application in _applications)
+            Container(
+              width: screenSize.width / 2.1,
+              child: Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Text(
+                              '${application.firstName}  ${application.lastName}',
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
+                          ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                        '${application.firstName}  ${application.lastName}'),
+                                    content: Column(
+                                      children: [
+                                        Text(application.firstName ?? ''),
+                                        Text(application.lastName ?? ''),
+                                        Text(application.gender ?? ''),
+                                        Text(application.status ?? ''),
+                                        Text(application.city ?? ''),
+                                        Text(application.father ?? ''),
+                                        Text(application.mother ?? ''),
+                                        Text(application.nationality ?? ''),
+                                        Text(application.contactPerson ?? ''),
+                                        Text(application.contactDetails ?? ''),
+                                        Text(application.description ?? ''),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text('Open'),
+                          ),
+                        ],
+                      ))),
+            ),
           Visibility(
             visible: _events.isNotEmpty,
             child: SizedBox(
@@ -79,15 +122,6 @@ class _UpdateState extends ConsumerState<Update> {
                           style: Theme.of(context).textTheme.bodyLarge)
                     ])),
           ),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "Exam Day", subtitle: '...')),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "Chrismas", subtitle: '...')),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "Math Contest", subtitle: '...')),
           Visibility(
             visible: _marks.isNotEmpty,
             child: SizedBox(
@@ -119,15 +153,6 @@ class _UpdateState extends ConsumerState<Update> {
                           style: Theme.of(context).textTheme.bodyLarge)
                     ])),
           ),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "English 2022", subtitle: '...')),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "Biology 2012", subtitle: '...')),
-          Container(
-              width: screenSize.width / 2.1,
-              child: MyCard(title: "Chemistry 2022", subtitle: '...')),
           Visibility(
             visible: _notifications.isNotEmpty,
             child: SizedBox(
