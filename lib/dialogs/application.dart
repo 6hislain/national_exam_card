@@ -50,6 +50,73 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
     });
   }
 
+  void _handleSubmit() async {
+    String city = _cityController.text.trim();
+    String father = _fatherController.text.trim();
+    String mother = _motherController.text.trim();
+    String lastName = _lastNameController.text.trim();
+    String firstName = _firstNameController.text.trim();
+    String description = _descriptionController.text.trim();
+    String nationality = _nationalityController.text.trim();
+    String contactPerson = _contactPersonController.text.trim();
+    String contactDetails = _contactDetailsController.text.trim();
+
+    if (city.isEmpty ||
+        mother.isEmpty ||
+        father.isEmpty ||
+        lastName.isEmpty ||
+        firstName.isEmpty ||
+        nationality.isEmpty ||
+        description.isEmpty ||
+        contactPerson.isEmpty ||
+        contactDetails.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Warning'),
+            content: Text('Fill in all the required fields.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    Map<String, dynamic> data = {
+      'first_name': firstName,
+      'last_name': lastName,
+      'city': city,
+      'mother': mother,
+      'father': father,
+      'nationality': nationality,
+      'contact_person': contactPerson,
+      'contact_details': contactDetails,
+      'description': description,
+      'gender': '$_selectedGender',
+      'combination': '$_selectedCombination',
+      'school': '$_selectedSchool',
+      'status': 'pending',
+      'dob': '2024-03-13 10:25:19',
+      'id': '${_user.id}',
+    };
+
+    var response = await apiService.postData(path: 'application', data: data);
+
+    print(response.statusCode);
+    print(response.headers);
+    print(response.body);
+
+    Navigator.of(context).pop();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -218,75 +285,7 @@ class _ApplyState extends ConsumerState<ApplyDialog> {
               ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () async {
-                  String city = _cityController.text.trim();
-                  String father = _fatherController.text.trim();
-                  String mother = _motherController.text.trim();
-                  String lastName = _lastNameController.text.trim();
-                  String firstName = _firstNameController.text.trim();
-                  String description = _descriptionController.text.trim();
-                  String nationality = _nationalityController.text.trim();
-                  String contactPerson = _contactPersonController.text.trim();
-                  String contactDetails = _contactDetailsController.text.trim();
-
-                  if (city.isEmpty ||
-                      mother.isEmpty ||
-                      father.isEmpty ||
-                      lastName.isEmpty ||
-                      firstName.isEmpty ||
-                      nationality.isEmpty ||
-                      description.isEmpty ||
-                      contactPerson.isEmpty ||
-                      contactDetails.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Warning'),
-                          content: Text('Fill in all the required fields.'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    return;
-                  }
-
-                  Map<String, dynamic> data = {
-                    'first_name': firstName,
-                    'last_name': lastName,
-                    'city': city,
-                    'mother': mother,
-                    'father': father,
-                    'nationality': nationality,
-                    'contact_person': contactPerson,
-                    'contact_details': contactDetails,
-                    'description': description,
-                    'gender': _selectedGender,
-                    'combination_id': _selectedCombination,
-                    'school_id': _selectedSchool,
-                    'status': 'pending',
-                    'dob': '2024-03-13 10:25:19',
-                    'id': _user.id,
-                  };
-
-                  print(data);
-
-                  var response = await apiService.postData(
-                      path: 'application', data: data);
-
-                  print(response.statusCode);
-                  print(response.headers);
-                  print(response.body);
-
-                  Navigator.of(context).pop();
-                },
+                onPressed: _handleSubmit,
                 child: Text('Submit'),
               ),
             ],
